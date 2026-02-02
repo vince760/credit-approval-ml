@@ -1,11 +1,12 @@
 import os
 import joblib
 import pandas as pd
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 MODEL_PATH = os.path.join(REPO_ROOT, "artifacts", "model.pkl")
+FRONTEND_DIST = os.path.join(REPO_ROOT, "frontend", "out")
 
 # Approval rule: approve if default risk below threshold
 DEFAULT_APPROVAL_THRESHOLD = float(os.environ.get("APPROVAL_THRESHOLD", "0.30"))
@@ -65,6 +66,17 @@ def predict():
         "approval_threshold": DEFAULT_APPROVAL_THRESHOLD
     })
 
+
+@app.get("/")
+def index():
+    return send_from_directory(FRONTEND_DIST, "index.html")
+
+@app.get("/<path:path>")
+def static_files(path):
+    # let API routes keep working
+    if path.startswith("api/") or path == "health":
+        return jsonify({"error": "Not found"}), 404
+    return send_from_directory(FRONTEND_DIST, path)
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=True)
