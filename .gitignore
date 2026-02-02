@@ -1,0 +1,13 @@
+# data (do not commit)
+data/
+*.csv
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# node / next build artifacts
+node_modules/
+.next/
