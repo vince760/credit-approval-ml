@@ -1,0 +1,201 @@
+{
+  "person_age": {
+    "dtype": "int64",
+    "missing": 0,
+    "unique": 58,
+    "top_values": {
+      "23": 3889,
+      "22": 3633,
+      "24": 3549,
+      "25": 3037,
+      "26": 2477,
+      "27": 2138,
+      "28": 1854,
+      "29": 1687,
+      "30": 1316,
+      "21": 1229
+    },
+    "min": 20.0,
+    "max": 144.0
+  },
+  "person_income": {
+    "dtype": "int64",
+    "missing": 0,
+    "unique": 4295,
+    "top_values": {
+      "60000": 1046,
+      "30000": 847,
+      "50000": 778,
+      "40000": 658,
+      "45000": 590,
+      "75000": 579,
+      "65000": 532,
+      "48000": 532,
+      "70000": 527,
+      "42000": 524
+    },
+    "min": 4000.0,
+    "max": 6000000.0
+  },
+  "person_home_ownership": {
+    "dtype": "object",
+    "missing": 0,
+    "unique": 4,
+    "top_values": {
+      "RENT": 16446,
+      "MORTGAGE": 13444,
+      "OWN": 2584,
+      "OTHER": 107
+    },
+    "min": null,
+    "max": null
+  },
+  "person_emp_length": {
+    "dtype": "float64",
+    "missing": 895,
+    "unique": 36,
+    "top_values": {
+      "0.0": 4105,
+      "2.0": 3849,
+      "3.0": 3456,
+      "5.0": 2946,
+      "1.0": 2915,
+      "4.0": 2874,
+      "6.0": 2666,
+      "7.0": 2196,
+      "8.0": 1687,
+      "9.0": 1367
+    },
+    "min": 0.0,
+    "max": 123.0
+  },
+  "loan_intent": {
+    "dtype": "object",
+    "missing": 0,
+    "unique": 6,
+    "top_values": {
+      "EDUCATION": 6453,
+      "MEDICAL": 6071,
+      "VENTURE": 5719,
+      "PERSONAL": 5521,
+      "DEBTCONSOLIDATION": 5212,
+      "HOMEIMPROVEMENT": 3605
+    },
+    "min": null,
+    "max": null
+  },
+  "loan_grade": {
+    "dtype": "object",
+    "missing": 0,
+    "unique": 7,
+    "top_values": {
+      "A": 10777,
+      "B": 10451,
+      "C": 6458,
+      "D": 3626,
+      "E": 964,
+      "F": 241,
+      "G": 64
+    },
+    "min": null,
+    "max": null
+  },
+  "loan_amnt": {
+    "dtype": "int64",
+    "missing": 0,
+    "unique": 753,
+    "top_values": {
+      "10000": 2664,
+      "5000": 2043,
+      "12000": 1809,
+      "6000": 1801,
+      "15000": 1502,
+      "8000": 1445,
+      "4000": 1066,
+      "3000": 1035,
+      "20000": 1016,
+      "7000": 993
+    },
+    "min": 500.0,
+    "max": 35000.0
+  },
+  "loan_int_rate": {
+    "dtype": "float64",
+    "missing": 3116,
+    "unique": 348,
+    "top_values": {
+      "7.51": 756,
+      "10.99": 749,
+      "7.49": 645,
+      "7.88": 642,
+      "5.42": 594,
+      "7.9": 573,
+      "11.49": 488,
+      "9.99": 463,
+      "13.49": 454,
+      "6.03": 448
+    },
+    "min": 5.42,
+    "max": 23.22
+  },
+  "loan_status": {
+    "dtype": "int64",
+    "missing": 0,
+    "unique": 2,
+    "top_values": {
+      "0": 25473,
+      "1": 7108
+    },
+    "min": 0.0,
+    "max": 1.0
+  },
+  "loan_percent_income": {
+    "dtype": "float64",
+    "missing": 0,
+    "unique": 77,
+    "top_values": {
+      "0.1": 1533,
+      "0.13": 1482,
+      "0.08": 1437,
+      "0.07": 1394,
+      "0.11": 1381,
+      "0.09": 1379,
+      "0.14": 1294,
+      "0.12": 1293,
+      "0.06": 1289,
+      "0.17": 1259
+    },
+    "min": 0.0,
+    "max": 0.83
+  },
+  "cb_person_default_on_file": {
+    "dtype": "object",
+    "missing": 0,
+    "unique": 2,
+    "top_values": {
+      "N": 26836,
+      "Y": 5745
+    },
+    "min": null,
+    "max": null
+  },
+  "cb_person_cred_hist_length": {
+    "dtype": "int64",
+    "missing": 0,
+    "unique": 29,
+    "top_values": {
+      "2": 5965,
+      "3": 5943,
+      "4": 5925,
+      "8": 1902,
+      "7": 1901,
+      "9": 1895,
+      "5": 1881,
+      "6": 1857,
+      "10": 1850,
+      "14": 492
+    },
+    "min": 2.0,
+    "max": 30.0
+  }
+}

@@ -11,3 +11,5 @@ venv/
 # node / next build artifacts
 node_modules/
 .next/
+
+sample_request.json
