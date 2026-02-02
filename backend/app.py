@@ -68,15 +68,26 @@ def predict():
 
 
 @app.get("/")
-def index():
-    return send_from_directory(FRONTEND_DIST, "index.html")
+def serve_index():
+    index_path = os.path.join(FRONTEND_DIST, "index.html")
+    if os.path.exists(index_path):
+        return send_from_directory(FRONTEND_DIST, "index.html")
+    return jsonify({"message": "Frontend not built. Build/export the frontend or run via Docker."}), 404
 
 @app.get("/<path:path>")
-def static_files(path):
-    # let API routes keep working
+def serve_static(path: str):
     if path.startswith("api/") or path == "health":
         return jsonify({"error": "Not found"}), 404
-    return send_from_directory(FRONTEND_DIST, path)
+
+    file_path = os.path.join(FRONTEND_DIST, path)
+    if os.path.exists(file_path):
+        return send_from_directory(FRONTEND_DIST, path)
+
+    index_path = os.path.join(FRONTEND_DIST, "index.html")
+    if os.path.exists(index_path):
+        return send_from_directory(FRONTEND_DIST, "index.html")
+
+    return jsonify({"error": "Frontend not built"}), 404
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=True)
