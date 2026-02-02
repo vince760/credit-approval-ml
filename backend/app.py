@@ -2,6 +2,7 @@ import os
 import joblib
 import pandas as pd
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 MODEL_PATH = os.path.join(REPO_ROOT, "artifacts", "model.pkl")
@@ -10,6 +11,7 @@ MODEL_PATH = os.path.join(REPO_ROOT, "artifacts", "model.pkl")
 DEFAULT_APPROVAL_THRESHOLD = float(os.environ.get("APPROVAL_THRESHOLD", "0.30"))
 
 app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 _model = None
 
 
