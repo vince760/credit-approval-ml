@@ -6,15 +6,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 \
 
 WORKDIR /app
 
-# Install dependencies first (better build caching)
-COPY backend/requirements.txt /app/backend/requirements.txt
-RUN pip install --no-cache-dir -r /app/backend/requirements.txt
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Copy backend code + artifacts (model.pkl is required)
 COPY backend /app/backend
 COPY artifacts /app/artifacts
 
 EXPOSE 5000
 
-# Run API in production mode
 CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "backend.app:app"]
