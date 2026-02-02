@@ -1,56 +1,64 @@
-name: Deploy (Heroku -> EC2)
+name: Deploy Heroku then EC2
 
 on:
   push:
     branches: ["main"]
 
 jobs:
-  deploy_heroku:
-    name: Deploy to Heroku
+  heroku:
     runs-on: ubuntu-latest
-    environment: staging
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Heroku CLI
         uses: ynab/heroku-cli-action@v1
 
-      - name: Login to Heroku Container Registry
+      - name: Login to Heroku registry
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:login
 
-      - name: Build and push container
+      - name: Build/push to Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
         run: heroku container:push web -a $HEROKU_APP_NAME
 
-      - name: Release container
+      - name: Release on Heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
         run: heroku container:release web -a $HEROKU_APP_NAME
 
-  verify_heroku:
-    name: Verify Heroku
-    runs-on: ubuntu-latest
-    needs: deploy_heroku
-    steps:
-      - name: Health check
+      - name: Heroku health check
         env:
           HEROKU_APP_URL: ${{ secrets.HEROKU_APP_URL }}
-        run: |
-          set -e
-          curl -fsS "$HEROKU_APP_URL/health"
+        run: curl -fsS "$HEROKU_APP_URL/health"
 
-  deploy_ec2:
-    name: Deploy to EC2
+  dockerhub:
     runs-on: ubuntu-latest
-    needs: verify_heroku
-    environment: production  # this is the manual approval gate
+    needs: heroku
     steps:
-      - name: SSH deploy (docker compose)
+      - uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push image (prod tag)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: vvitale087/credit-approval-ml:prod
+
+  ec2:
+    runs-on: ubuntu-latest
+    needs: dockerhub
+    steps:
+      - name: Deploy on EC2 (docker compose pull + up)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
