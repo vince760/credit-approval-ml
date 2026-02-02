@@ -5,7 +5,7 @@ COPY frontend/package*.json ./
 RUN npm ci
 
 COPY frontend ./
-RUN npm run build && npx next export
+RUN npm run build
 
 
 FROM python:3.11-slim
