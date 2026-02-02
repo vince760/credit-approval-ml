@@ -1,0 +1,64 @@
+name: Deploy (Heroku -> EC2)
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy_heroku:
+    name: Deploy to Heroku
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Heroku CLI
+        uses: ynab/heroku-cli-action@v1
+
+      - name: Login to Heroku Container Registry
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:login
+
+      - name: Build and push container
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+        run: heroku container:push web -a $HEROKU_APP_NAME
+
+      - name: Release container
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+        run: heroku container:release web -a $HEROKU_APP_NAME
+
+  verify_heroku:
+    name: Verify Heroku
+    runs-on: ubuntu-latest
+    needs: deploy_heroku
+    steps:
+      - name: Health check
+        env:
+          HEROKU_APP_URL: ${{ secrets.HEROKU_APP_URL }}
+        run: |
+          set -e
+          curl -fsS "$HEROKU_APP_URL/health"
+
+  deploy_ec2:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+    needs: verify_heroku
+    environment: production  # this is the manual approval gate
+    steps:
+      - name: SSH deploy (docker compose)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+            cd /opt/credit-approval-ml
+            docker compose pull
+            docker compose up -d
+            docker image prune -f
