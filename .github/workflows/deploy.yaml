@@ -6,7 +6,7 @@ on:
 
 jobs:
   heroku:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
 
@@ -36,7 +36,7 @@ jobs:
         run: curl -fsS "$HEROKU_APP_URL/health"
 
   dockerhub:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: heroku
     steps:
       - uses: actions/checkout@v4
@@ -55,7 +55,7 @@ jobs:
           tags: vvitale087/credit-approval-ml:prod
 
   ec2:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: dockerhub
     steps:
       - name: Deploy on EC2 (docker compose pull + up)
